@@ -1,5 +1,5 @@
-class ShareableLocation < ApplicationRecord
-    has_many :shareable_items
+class Location < ApplicationRecord
+    has_many :items
 
     geocoded_by :address   
     after_validation :geocode, if: :address_changed?

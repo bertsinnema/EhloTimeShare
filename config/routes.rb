@@ -3,14 +3,14 @@ Rails.application.routes.draw do
     namespace :v1 do
       
       #locations
-      resources :shareable_locations do
+      resources :locations do
         member do
-          get 'items', to: 'shareable_locations#items'
+          get 'items', to: 'locations#items'
         end
       end
       
       #items
-      resources :shareable_items
+      resources :items
     end
   end
 
