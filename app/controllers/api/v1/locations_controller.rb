@@ -6,12 +6,12 @@ class Api::V1::LocationsController < ApplicationController
   def index
     @locations = Location.all
 
-    render json: @locations
+    render json: LocationSerializer.new(@locations).serializable_hash
   end
 
   # GET /api/locations/1
   def show
-    render json: @location
+    render json: LocationSerializer.new(@location).serializable_hash
   end
 
   # POST /api/locations
@@ -19,7 +19,7 @@ class Api::V1::LocationsController < ApplicationController
     @location = Location.new(hareable_location_params)
 
     if @location.save
-      render json: @location, status: :created, location: @location
+      render json: LocationSerializer.new(@location).serializable_hash, status: :created, location: @location
     else
       render json: @location.errors, status: :unprocessable_entity
     end
@@ -28,7 +28,7 @@ class Api::V1::LocationsController < ApplicationController
   # PATCH/PUT /api/locations/1
   def update
     if @location.update(location_params)
-      render json: @location
+      render json: LocationSerializer.new(@location).serializable_hash
     else
       render json: @location.errors, status: :unprocessable_entity
     end
@@ -44,7 +44,7 @@ class Api::V1::LocationsController < ApplicationController
   def items
     @location = Location.find(params[:id])
     @items = @location.items
-    render json: @items
+    render json: ItemSerializer.new(@items).serializable_hash
   end
 
 

@@ -6,12 +6,12 @@ class Api::V1::ItemsController < ApplicationController
     def index
       @items = Item.all
   
-      render json: @items
+      render json: ItemSerializer.new(@items).serializable_hash
     end
   
     # GET /api/items/1
     def show
-      render json: @item
+      render json: ItemSerializer.new(@item).serializable_hash
     end
   
     # POST /api/items
