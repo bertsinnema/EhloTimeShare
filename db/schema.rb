@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_04_204320) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_05_131109) do
   create_table "shareable_items", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -21,11 +21,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_04_204320) do
 
   create_table "shareable_locations", force: :cascade do |t|
     t.string "name"
-    t.string "address"
     t.string "zipcode"
     t.string "city"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "latitude"
+    t.float "longitude"
+    t.string "country"
+    t.string "street"
+    t.index ["latitude"], name: "index_shareable_locations_on_latitude"
+    t.index ["longitude"], name: "index_shareable_locations_on_longitude"
   end
 
   create_table "users", force: :cascade do |t|
