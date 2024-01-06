@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_05_145213) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_06_132644) do
   create_table "items", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -29,8 +29,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_05_145213) do
     t.float "longitude"
     t.string "country"
     t.string "street"
+    t.boolean "public"
     t.index ["latitude"], name: "index_locations_on_latitude"
     t.index ["longitude"], name: "index_locations_on_longitude"
+  end
+
+  create_table "user_locations", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "location_id", null: false
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["location_id"], name: "index_user_locations_on_location_id"
+    t.index ["user_id", "location_id"], name: "index_user_locations_on_user_id_and_location_id", unique: true
+    t.index ["user_id"], name: "index_user_locations_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -49,4 +61,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_05_145213) do
   end
 
   add_foreign_key "items", "locations"
+  add_foreign_key "user_locations", "locations"
+  add_foreign_key "user_locations", "users"
 end

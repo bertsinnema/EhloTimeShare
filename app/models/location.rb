@@ -1,5 +1,8 @@
 class Location < ApplicationRecord
+    has_many :user_locations
+    has_many :users, through: :user_locations
     has_many :items
+    
 
     geocoded_by :address   
     after_validation :geocode, if: :address_changed?

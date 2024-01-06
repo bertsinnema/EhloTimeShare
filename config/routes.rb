@@ -7,6 +7,9 @@ Rails.application.routes.draw do
         member do
           get 'items', to: 'locations#items'
         end
+        member do
+          get 'users', to: 'locations#users'
+        end
       end
       
       #items
