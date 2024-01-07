@@ -15,6 +15,7 @@ class Api::V1::LocationsController < ApplicationController
 
   # POST /api/v1/locations
   def create
+    authorize! :create, Location
     @location = Location.new(hareable_location_params)
 
     if @location.save
@@ -26,6 +27,7 @@ class Api::V1::LocationsController < ApplicationController
 
   # PATCH/PUT /api/v1/locations/1
   def update
+    authorize! :update, @location
     if @location.update(location_params)
       render json: LocationSerializer.new(@location).serializable_hash
     else
@@ -35,6 +37,7 @@ class Api::V1::LocationsController < ApplicationController
 
   # DELETE /api/v1/locations/1
   def destroy
+    authorize! :destroy, @location
     @location.destroy!
   end
 

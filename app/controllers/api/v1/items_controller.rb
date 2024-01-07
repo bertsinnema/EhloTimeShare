@@ -4,18 +4,19 @@ class Api::V1::ItemsController < ApplicationController
   
     # GET /api/items
     def index
-      @items = Item.all
-  
+      @items = Item.accessible_by(current_ability, :read)
       render json: ItemSerializer.new(@items).serializable_hash
     end
   
     # GET /api/items/1
     def show
+      authorize! :read, @item
       render json: ItemSerializer.new(@item).serializable_hash
     end
   
     # POST /api/items
     def create
+      authorize! :create, Item
       @item = Item.new(hareable_item_params)
   
       if @item.save
@@ -27,6 +28,7 @@ class Api::V1::ItemsController < ApplicationController
   
     # PATCH/PUT /api/items/1
     def update
+      authorize! :update, @item
       if @item.update(item_params)
         render json: @item
       else
@@ -36,6 +38,7 @@ class Api::V1::ItemsController < ApplicationController
   
     # DELETE /api/items/1
     def destroy
+      authorize! :destroy, @item
       @item.destroy!
     end
   
