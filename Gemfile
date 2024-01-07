@@ -51,3 +51,5 @@ end
 
 
 gem "geocoder", "~> 1.8"
+
+gem "cancancan", "~> 3.5"

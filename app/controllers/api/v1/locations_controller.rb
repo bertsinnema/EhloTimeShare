@@ -1,20 +1,15 @@
 class Api::V1::LocationsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_location, only: %i[ show update destroy items users ]
 
   # GET /api/v1/locations
   def index
-    # Get locations that are public or where the user is a member
-    @locations = Location
-    .joins(:user_locations)
-    .where('locations.public = ? OR user_locations.user_id = ?', true, current_user.id)
-    .distinct
-
+    @locations = Location.accessible_by(current_ability, :read)
     render json: LocationSerializer.new(@locations).serializable_hash
   end
 
   # GET /api/v1/locations/1
   def show
+    authorize! :read, @location
     render json: LocationSerializer.new(@location).serializable_hash
   end
 
@@ -46,14 +41,15 @@ class Api::V1::LocationsController < ApplicationController
 
   # GET /api/v1/locations/1/items
   def items
+    authorize! :read, Item
     @items = @location.items
     render json: ItemSerializer.new(@items).serializable_hash
   end
 
   # GET /api/v1/locations/:id/users
   def users
+    authorize! :edit, @location
     @users = @location.users.includes(:user_locations)
-
     render json: LocationUserSerializer.new(@users,{params: { location_id: @location.id }}).serializable_hash
   end
 
