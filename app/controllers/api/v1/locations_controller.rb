@@ -1,7 +1,6 @@
 class Api::V1::LocationsController < ApplicationController
   before_action :authenticate_user!
-  before_action :authorize_user, only: [:users]
-  before_action :set_location, only: %i[ show update destroy ]
+  before_action :set_location, only: %i[ show update destroy items users ]
 
   # GET /api/v1/locations
   def index
@@ -47,37 +46,18 @@ class Api::V1::LocationsController < ApplicationController
 
   # GET /api/v1/locations/1/items
   def items
-    @location = Location.find(params[:id])
     @items = @location.items
     render json: ItemSerializer.new(@items).serializable_hash
   end
 
   # GET /api/v1/locations/:id/users
   def users
-    @location = Location.find(params[:id])
     @users = @location.users.includes(:user_locations)
 
     render json: LocationUserSerializer.new(@users,{params: { location_id: @location.id }}).serializable_hash
   end
 
   private
-
-    def authorize_user
-      # Retrieve the location
-      @location = Location.find(params[:id])
-
-      # Check if the current user has the required role in the location
-      unless current_user_has_required_role?
-        render json: { error: 'Unauthorized' }, status: :unauthorized
-      end
-    end
-
-    def current_user_has_required_role?
-      # Check if the current user has the required role in the location
-      # You may need to adjust this based on your actual implementation
-      user_location = current_user.user_locations.find_by(location_id: @location.id)
-      user_location&.role.in?(%w[owner manager])
-    end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_location
