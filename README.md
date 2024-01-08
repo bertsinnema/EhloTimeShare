@@ -1,24 +1,24 @@
-# README
+# Ehlo Time Sharing
+API for a Pet project of an app for sharing assets like cars, airplanes and tools.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
 
-* Ruby version
+## Getting Started
 
-* System dependencies
+To clone and run the app locally, follow these steps:
 
-* Configuration
+```bash
+# Clone the repository
+git clone https://github.com/bertsinnema/EhloTimeShare.git
 
-* Database creation
+# Navigate to the app directory
+cd EhloTimeShare
 
-* Database initialization
+# Install dependencies
+bundle install
 
-* How to run the test suite
+# Set up the database
+rails db:migrate
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+# Start the application
+rails s
