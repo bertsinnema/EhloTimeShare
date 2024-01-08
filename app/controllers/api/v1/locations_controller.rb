@@ -16,10 +16,12 @@ class Api::V1::LocationsController < ApplicationController
   # POST /api/v1/locations
   def create
     authorize! :create, Location
-    @location = Location.new(hareable_location_params)
+    @location = Location.new(parsed_json_request)
+    @location.save
+    @location.user_locations.create(user: current_user, role: "owner")
 
     if @location.save
-      render json: LocationSerializer.new(@location).serializable_hash, status: :created, location: @location
+      render json: LocationSerializer.new(@location).serializable_hash, status: :created, location: api_v1_location_path(@location.id)
     else
       render json: @location.errors, status: :unprocessable_entity
     end
@@ -29,7 +31,7 @@ class Api::V1::LocationsController < ApplicationController
   def update
     authorize! :update, @location
     if @location.update(location_params)
-      render json: LocationSerializer.new(@location).serializable_hash
+      render json: LocationSerializer.new(@location).serializable_hash, location: api_v1_location_path(@location.id)
     else
       render json: @location.errors, status: :unprocessable_entity
     end
@@ -61,10 +63,5 @@ class Api::V1::LocationsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_location
       @location = Location.find(params[:id])
-    end
-
-    # Only allow a list of trusted parameters through.
-    def location_params
-      params.fetch(:hareable_location, {})
     end
 end

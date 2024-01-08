@@ -10,13 +10,18 @@ class Ability
     can :read, Item, location: { public: true }
     return unless user.present?
     
-    #Define role specific abillities
+    #allow anyone to create a Location
+    #can :create, Location
+
+    #Define Location specific abillities
     user.user_locations.each do |user_location|
       case user_location.role
       when 'owner'
         can :manage, Location, id: user_location.location_id
         can :manage, Item, location_id: user_location.location_id
         can :manage, UserLocation, location_id: user_location.location_id
+        #Making sure only owners of a location can delete the location
+        can :destroy, Location, id: user_location.location_id
       when 'manager'
         can :manage, Location, id: user_location.location_id
         can :manage, Item, location_id: user_location.location_id

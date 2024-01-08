@@ -1,7 +1,7 @@
 class Location < ApplicationRecord
-    has_many :user_locations
+    has_many :user_locations, dependent: :destroy
     has_many :users, through: :user_locations
-    has_many :items
+    has_many :items, dependent: :destroy
     
 
     geocoded_by :address   
