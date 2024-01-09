@@ -1,0 +1,10 @@
+# test/fixtures/items.yml
+cessna:
+  id: 1
+  name: Cessna 172
+  location_id: 1
+
+hammer:
+  id: 2
+  name: Hammer
+  location_id: 2

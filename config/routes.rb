@@ -12,6 +12,9 @@ Rails.application.routes.draw do
         end
       end
       
+      #user_locations
+      resources :user_locations
+      
       #items
       resources :items
     end

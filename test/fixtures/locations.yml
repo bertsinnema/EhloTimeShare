@@ -1,0 +1,17 @@
+# test/fixtures/locations.yml
+hangar:
+  id: 1
+  name: NNAC Aero Club
+  street: Zaailand 1
+  city: Leeuwarden
+  zipcode: 8900 BB
+  country: The Netherlands
+  public: false
+shed:
+  id: 2
+  name: Bob's shed
+  street: Zaailand 1
+  city: Leeuwarden
+  zipcode: 8900 AA
+  country: Netherlands
+  public: true

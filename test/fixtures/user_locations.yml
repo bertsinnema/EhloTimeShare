@@ -1,0 +1,30 @@
+# test/fixtures/user_locations.yml
+orville_owner_hangar:
+  id: 1
+  user_id: 1
+  location_id: 1
+  role: owner
+
+wilbur_manager_hangar:
+  id: 2
+  user_id: 2
+  location_id: 1
+  role: manager
+
+sully_member_hangar:
+  id: 3
+  user_id: 3
+  location_id: 1
+  role: member
+
+bob_manager_hangar:
+  id: 4
+  user_id: 4
+  location_id: 1
+  role: owner
+
+bob_owner_shed:
+  id: 5
+  user_id: 4
+  location_id: 2
+  role: owner

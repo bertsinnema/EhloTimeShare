@@ -1,0 +1,30 @@
+# test/fixtures/users.yml
+orville:
+  id: 1
+  name: Orville Wright
+  email: orville@wright.com
+  jti: laksjdlkjasdlkjaskljdaskdlasj
+
+wilbur:
+  id: 2
+  name: Wilbur Wright
+  email: wilbur@wright.com
+  jti: laksjdlkjasdpoipoipoipoiopipo
+
+sully:
+  id: 3
+  name: Capt. Sullivan
+  email: sully@usairways.com
+  jti: laksjdlkjasdlkjasasasasasasas
+
+bob:
+  id: 4
+  name: Bob Tool
+  email: bob@gmail.com
+  jti: laksjdlkjasdlkjdfkjdfkjdkfdkf
+
+alice:
+  id: 5
+  name: Alice Lender
+  email: alice@gmail.com
+  jti: ladddddkjasdlkjdfkjdfkjdkfdkf
