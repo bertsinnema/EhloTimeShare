@@ -17,10 +17,8 @@ class Api::V1::LocationsController < ApplicationController
   def create
     authorize! :create, Location
     @location = Location.new(parsed_json_request)
-    @location.save
-    @location.user_locations.create(user: current_user, role: "owner")
-
-    if @location.save
+    
+    if @location.save && @location.user_locations.create(user: current_user, role: "owner")
       render json: LocationSerializer.new(@location).serializable_hash, status: :created, location: api_v1_location_path(@location.id)
     else
       render json: @location.errors, status: :unprocessable_entity
@@ -30,7 +28,7 @@ class Api::V1::LocationsController < ApplicationController
   # PATCH/PUT /api/v1/locations/1
   def update
     authorize! :update, @location
-    if @location.update(location_params)
+    if @location.update(parsed_json_request)
       render json: LocationSerializer.new(@location).serializable_hash, location: api_v1_location_path(@location.id)
     else
       render json: @location.errors, status: :unprocessable_entity
@@ -46,14 +44,14 @@ class Api::V1::LocationsController < ApplicationController
 
   # GET /api/v1/locations/1/items
   def items
-    authorize! :read, Item
+    authorize! :read, @location
     @items = @location.items
     render json: ItemSerializer.new(@items).serializable_hash
   end
 
   # GET /api/v1/locations/:id/users
   def users
-    authorize! :edit, @location
+    authorize! :edit, UserLocation
     @users = @location.users.includes(:user_locations)
     render json: LocationUserSerializer.new(@users,{params: { location_id: @location.id }}).serializable_hash
   end

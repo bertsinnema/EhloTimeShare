@@ -4,15 +4,14 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    user||=User.new
 
     #Define public abillities
     can :read, Location, public: true
     can :read, Item, location: { public: true }
     return unless user.present?
     
-    #allow anyone to create a Location
-    #can :create, Location
+    #allow anyone to create a new Location
+    can :create, Location
 
     #Define Location specific abillities
     user.user_locations.each do |user_location|

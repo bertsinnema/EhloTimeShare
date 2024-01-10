@@ -21,7 +21,7 @@ bob_manager_hangar:
   id: 4
   user_id: 4
   location_id: 1
-  role: owner
+  role: manager
 
 bob_owner_shed:
   id: 5

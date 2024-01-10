@@ -25,8 +25,17 @@ class AbilityTest < ActiveSupport::TestCase
     assert ability.cannot?(:read, items(:cessna))
   end  
 
+  test 'anonymous user cannot create Location of private locations' do
+    ability = Ability.new(nil)
+    assert ability.cannot?(:create, Location.new)
+  end  
 
   # SIGNED IN USERS
+
+  test 'you can create a location when you are logged in' do
+    ability = Ability.new(users(:alice))
+    assert ability.can?(:create, Location)
+  end
 
   test 'you can manage a location when you are the owner' do
     ability = Ability.new(users(:orville))

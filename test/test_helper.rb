@@ -1,11 +1,12 @@
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
+require 'devise/jwt/test_helpers'
 
 module ActiveSupport
   class TestCase
     include CanCan::Ability
-
+        
     # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors)
 
@@ -14,5 +15,13 @@ module ActiveSupport
 
 
     # Add more helper methods to be used by all tests here...
+
+
+    def get_auth_headers(user)
+      headers = { 'Accept' => 'application/json', 'Content-Type' => 'application/json' }
+      # This will add a valid token for `user` in the `Authorization` header
+      return Devise::JWT::TestHelpers.auth_headers(headers, user)
+    end
+
   end
 end
