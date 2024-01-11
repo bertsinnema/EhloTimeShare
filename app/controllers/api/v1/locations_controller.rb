@@ -1,5 +1,5 @@
 class Api::V1::LocationsController < ApplicationController
-  before_action :set_location, only: %i[ show update destroy items users ]
+  before_action :set_location, only: %i[ show update destroy items ]
 
   # GET /api/v1/locations
   def index
@@ -41,19 +41,11 @@ class Api::V1::LocationsController < ApplicationController
     @location.destroy!
   end
 
-
   # GET /api/v1/locations/1/items
   def items
     authorize! :read, @location
     @items = @location.items
     render json: ItemSerializer.new(@items).serializable_hash
-  end
-
-  # GET /api/v1/locations/:id/users
-  def users
-    authorize! :edit, UserLocation
-    @users = @location.users.includes(:user_locations)
-    render json: LocationUserSerializer.new(@users,{params: { location_id: @location.id }}).serializable_hash
   end
 
   private

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Ability
   include CanCan::Ability
 
@@ -19,17 +17,12 @@ class Ability
         when 'owner'
           can :manage, Location, id: user_location.location_id
           can :manage, Item, location_id: user_location.location_id
-          can :manage, UserLocation, location_id: user_location.location_id
-          #Owners can not manage themselves, this goes through ownership transfer
-          cannot :manage, UserLocation, role: 'owner', location_id: user_location.location_id
+          can :read, UserLocation, location_id: user_location.location_id
         
         when 'manager'
           can :read, Location, id: user_location.location_id
           can :manage, Item, location_id: user_location.location_id
-          can :manage, UserLocation, location_id: user_location.location_id
-          #Managers can not manage owners
-          cannot :manage, UserLocation, role: 'owner', location_id: user_location.location_id
-          cannot :manage, UserLocation, role: 'manager', location_id: user_location.location_id
+          can :read, UserLocation, location_id: user_location.location_id
         
         when 'member'
           can :read, Location, id: user_location.location_id, public: false

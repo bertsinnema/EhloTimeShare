@@ -57,10 +57,11 @@ class AbilityTest < ActiveSupport::TestCase
     assert ability.cannot?(:manage, items(:hammer))
   end  
 
-  test 'you can manage users of a location where you are the owner' do
+  test 'you can read all users of a location where you are the owner' do
     ability = Ability.new(users(:orville))
-    assert ability.can?(:manage, user_locations(:wilbur_manager_hangar))
-    assert ability.can?(:manage, user_locations(:sully_member_hangar))
+    assert ability.can?(:read, user_locations(:orville_owner_hangar))
+    assert ability.can?(:read, user_locations(:wilbur_manager_hangar))
+    assert ability.can?(:read, user_locations(:sully_member_hangar))
   end
 
   test 'you cannot manage users of a location where you are not the owner' do
@@ -82,9 +83,9 @@ class AbilityTest < ActiveSupport::TestCase
     assert ability.cannot?(:manage, locations(:hangar))
   end
 
-  test 'you can manage users of a location where you are the manager' do
+  test 'you can read users of a location where you are the manager' do
     ability = Ability.new(users(:wilbur))
-    assert ability.can?(:manage, user_locations(:sully_member_hangar))
+    assert ability.can?(:read, user_locations(:sully_member_hangar))
   end
 
   test 'you can manage items of a location where you are the manager' do

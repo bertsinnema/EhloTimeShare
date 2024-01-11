@@ -5,7 +5,7 @@ class Location < ApplicationRecord
     
 
     geocoded_by :address   
-    before_save :geocode, if: :address_changed?
+    after_validation :geocode, if: :address_changed?
 
     def address
         [street, city, country, zipcode].compact.join(', ')

@@ -44,29 +44,29 @@ class Api::V1::LocationsControllerTest < ActionDispatch::IntegrationTest
     end   
 
     test 'should not get users for unauthenticated user for public and private location' do
-        get users_api_v1_location_url(locations(:shed))
+        get api_v1_location_users_url(locations(:shed))
         assert_response :not_found
-        get users_api_v1_location_url(locations(:hangar))
+        get api_v1_location_users_url(locations(:hangar))
         assert_response :not_found
     end
 
     test 'should get users if you are an owner or manager of a location not when a member or non member' do
-        get users_api_v1_location_url(locations(:hangar)), headers: get_auth_headers(users(:orville))
+        get api_v1_location_users_url(locations(:hangar)), headers: get_auth_headers(users(:orville))
         assert_response :success
 
-        get users_api_v1_location_url(locations(:hangar)), headers: get_auth_headers(users(:wilbur))
+        get api_v1_location_users_url(locations(:hangar)), headers: get_auth_headers(users(:wilbur))
         assert_response :success
 
-        get users_api_v1_location_url(locations(:hangar)), headers: get_auth_headers(users(:bob))
+        get api_v1_location_users_url(locations(:hangar)), headers: get_auth_headers(users(:bob))
         assert_response :success           
         
-        get users_api_v1_location_url(locations(:shed)), headers: get_auth_headers(users(:bob))
+        get api_v1_location_users_url(locations(:shed)), headers: get_auth_headers(users(:bob))
         assert_response :success    
         
-        get users_api_v1_location_url(locations(:shed)), headers: get_auth_headers(users(:alice))
+        get api_v1_location_users_url(locations(:shed)), headers: get_auth_headers(users(:alice))
         assert_response :not_found   
         
-        get users_api_v1_location_url(locations(:hangar)), headers: get_auth_headers(users(:sully))
+        get api_v1_location_users_url(locations(:hangar)), headers: get_auth_headers(users(:sully))
         assert_response :not_found           
     end
 

@@ -7,16 +7,12 @@ Rails.application.routes.draw do
         member do
           get 'items', to: 'locations#items'
         end
-        member do
-          get 'users', to: 'locations#users'
-        end
+
+        resources :users, controller: 'user_locations', only: [:index, :create, :update, :destroy]
       end
       
-      #user_locations
-      resources :user_locations
-      
       #items
-      resources :items
+      #resources :items
     end
   end
 
