@@ -72,7 +72,12 @@ class AbilityTest < ActiveSupport::TestCase
   test 'you cannot manage yourself in a location you own' do
     ability = Ability.new(users(:orville))
     assert ability.cannot?(:manage, user_locations(:orville_owner_hangar))
-  end  
+  end 
+  
+  test 'as manager you can not read locations you are not a manager or owner in' do
+    ability = Ability.new(users(:alice))
+    assert ability.cannot?(:read, user_locations(:orville_owner_hangar))
+  end 
 
   #todo: ownership transfer needs some thought, probably needs a custom ability
 

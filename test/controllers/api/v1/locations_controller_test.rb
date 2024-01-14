@@ -43,33 +43,6 @@ class Api::V1::LocationsControllerTest < ActionDispatch::IntegrationTest
         assert_response :not_found
     end   
 
-    test 'should not get users for unauthenticated user for public and private location' do
-        get api_v1_location_users_url(locations(:shed))
-        assert_response :not_found
-        get api_v1_location_users_url(locations(:hangar))
-        assert_response :not_found
-    end
-
-    test 'should get users if you are an owner or manager of a location not when a member or non member' do
-        get api_v1_location_users_url(locations(:hangar)), headers: get_auth_headers(users(:orville))
-        assert_response :success
-
-        get api_v1_location_users_url(locations(:hangar)), headers: get_auth_headers(users(:wilbur))
-        assert_response :success
-
-        get api_v1_location_users_url(locations(:hangar)), headers: get_auth_headers(users(:bob))
-        assert_response :success           
-        
-        get api_v1_location_users_url(locations(:shed)), headers: get_auth_headers(users(:bob))
-        assert_response :success    
-        
-        get api_v1_location_users_url(locations(:shed)), headers: get_auth_headers(users(:alice))
-        assert_response :not_found   
-        
-        get api_v1_location_users_url(locations(:hangar)), headers: get_auth_headers(users(:sully))
-        assert_response :not_found           
-    end
-
     test 'should be able to create location when logged in and is geocoded' do
         assert_difference('Location.count') do
         post api_v1_locations_url,

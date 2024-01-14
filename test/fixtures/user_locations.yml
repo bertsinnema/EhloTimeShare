@@ -28,3 +28,9 @@ bob_owner_shed:
   user_id: 4
   location_id: 2
   role: owner
+
+alice_manager_shed:
+  id: 6
+  user_id: 5
+  location_id: 2
+  role: manager
