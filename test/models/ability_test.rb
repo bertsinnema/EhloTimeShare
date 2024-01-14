@@ -69,9 +69,11 @@ class AbilityTest < ActiveSupport::TestCase
     assert ability.cannot?(:manage, user_locations(:bob_owner_shed))
   end  
 
-  test 'you cannot manage yourself in a location you own' do
+  test 'you cannot edit or remove  yourself in a location you own' do
     ability = Ability.new(users(:orville))
-    assert ability.cannot?(:manage, user_locations(:orville_owner_hangar))
+    assert ability.cannot?(:edit, user_locations(:orville_owner_hangar))
+    assert ability.cannot?(:destroy, user_locations(:orville_owner_hangar))
+
   end 
   
   test 'as manager you can not read locations you are not a manager or owner in' do
