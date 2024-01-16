@@ -3,19 +3,31 @@ class Api::V1::UserLocationsController < ApplicationController
 
   # GET /api/v1/locations/:location_id/users
   def index
-    puts request.path
-    authorize! :read, UserLocation.find(2)
+    authorize! :read, UserLocation.new({location_id: @location.id})
     options = { include:  [:user] }
     render json: LocationUserSerializer.new(@location.user_locations, options).serializable_hash
   end
   
-  # POST /api/v1/locations/:location_id/users/:id
+  # POST /api/v1/locations/:location_id/users
+  #TODO: create invite strategy
   def create
+    authorize! :create, UserLocation.new({location_id: @location.id})
+    @user_location = UserLocation.new(parsed_json_request);
+    if @location.save
+      render json: LocationUserSerializer.new(@user_location).serializable_hash
+    else
+      render json: @user_location.errors, status: :unprocessable_entity
+    end    
   end
 
   # PATCH/PUT /api/v1/locations/:location_id/users/:id
   def update
     authorize! :update, @user_location
+    if @user_location.update(parsed_json_request)
+      render json: LocationUserSerializer.new(@user_location).serializable_hash
+    else
+      render json: @user_location.errors, status: :unprocessable_entity
+    end    
   end
 
   # DELETE /api/v1/locations/:location_id/users/:id
@@ -29,9 +41,5 @@ class Api::V1::UserLocationsController < ApplicationController
   def set_location
     @location = Location.find(params[:location_id])
     @user_location = UserLocation.find_by(location_id: params[:location_id], user_id: params[:id])
-  end
-
-  def current_user_location
-    # current_user&.user_locations&.find { |user_location| user_location.location_id == @location.id }
   end
 end

@@ -10,6 +10,8 @@ class Ability
     
     #allow anyone to create a new Location
     can :create, Location
+    
+    
 
     #Define Location specific abillities
     user.user_locations.each do |user_location|
@@ -21,8 +23,8 @@ class Ability
           can :manage, Item, location_id: user_location.location_id
           can :manage, UserLocation, location_id: user_location.location_id
 
-          # Owner can not remove themselves
-          cannot [:edit, :destroy], UserLocation, role: "owner", location_id: user_location.location_id
+          # Owner can not remove or edit themselves
+          cannot [:update, :destroy], UserLocation, user: user_location.user
           
         
         when 'manager'
@@ -31,7 +33,7 @@ class Ability
           can :manage, Item, location_id: user_location.location_id
 
           # Managers can only manage members
-          can :manage, UserLocation, role: "member", location_id: user_location.location_id
+          can [:create, :destroy], UserLocation, role: "member", location_id: user_location.location_id
           # Managers can remove themselves
           can :destroy, UserLocation, user_id: user.id, location_id: user_location.location_id
           # Managers can read the full user list
@@ -47,6 +49,8 @@ class Ability
 
       end
     end
+
+    
 
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/blob/develop/docs/define_check_abilities.md

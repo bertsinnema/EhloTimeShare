@@ -92,4 +92,115 @@ class Api::V1::UserLocationsControllerTest < ActionDispatch::IntegrationTest
         end        
         assert_response :not_found 
     end
+
+    test 'should be able to update user_location when user is the owner' do
+        # Assume 'location' is an existing record in your test database
+        user_location = user_locations(:wilbur_manager_hangar)
+        location = locations(:hangar)
+      
+        put api_v1_location_user_url(location,user_location),
+              params: {
+                data: {
+                  type: 'user_location',
+                  id: user_location.id,
+                  attributes: {
+                    location_id: user_location.location_id,
+                    role: 'member'
+                  }
+                }
+              },
+              headers: get_auth_headers(users(:orville)),
+              as: :json
+      
+        assert_response :ok
+      
+        # Reload the record from the database to get the updated attributes
+        user_location.reload
+      
+        # Assert that the attributes have been updated
+        assert_equal 'member', user_location.role
+    end
+
+    test 'should not be able to update user_location when user is not an owner' do
+        # Assume 'location' is an existing record in your test database
+        user_location = user_locations(:wilbur_manager_hangar)
+        location = locations(:hangar)
+      
+        put api_v1_location_user_url(location,user_location),
+              params: {
+                data: {
+                  type: 'user_location',
+                  id: user_location.id,
+                  attributes: {
+                    location_id: user_location.location_id,
+                    role: 'member'
+                  }
+                }
+              },
+              headers: get_auth_headers(users(:sully)),
+              as: :json
+      
+        assert_response :not_found
+
+        put api_v1_location_user_url(location,user_location),
+              params: {
+                data: {
+                  type: 'user_location',
+                  id: user_location.id,
+                  attributes: {
+                    location_id: user_location.location_id,
+                    role: 'member'
+                  }
+                }
+              },
+              headers: get_auth_headers(users(:bob)),
+              as: :json
+      
+        assert_response :not_found        
+    end  
+    
+    test 'should not be able to update user_location when user is owner outside the current location' do
+        # Assume 'location' is an existing record in your test database
+        user_location = user_locations(:bob_owner_shed)
+        location = locations(:shed)
+      
+        put api_v1_location_user_url(location,user_location),
+              params: {
+                data: {
+                  type: 'user_location',
+                  id: user_location.id,
+                  attributes: {
+                    location_id: user_location.location_id,
+                    role: 'member'
+                  }
+                }
+              },
+              headers: get_auth_headers(users(:orville)),
+              as: :json
+      
+        assert_response :not_found
+    end
+
+    test 'should not be able to update user_location on yourself as owner' do
+        # Not able to as we implement an ownership transfer strategy for this
+        user_location = user_locations(:orville_owner_hangar)
+        location = locations(:hangar)
+      
+        put api_v1_location_user_url(location,user_location),
+              params: {
+                data: {
+                  type: 'user_location',
+                  id: user_location.id,
+                  attributes: {
+                    location_id: user_location.location_id,
+                    role: 'member'
+                  }
+                }
+              },
+              headers: get_auth_headers(users(:orville)),
+              as: :json
+      
+        assert_response :not_found
+    end
+
 end
