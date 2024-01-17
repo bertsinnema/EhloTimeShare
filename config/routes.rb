@@ -4,10 +4,7 @@ Rails.application.routes.draw do
       
       #locations
       resources :locations do
-        member do
-          get 'items', to: 'locations#items'
-        end
-
+        resources :items
         resources :users, controller: 'user_locations', only: [:index, :create, :update, :destroy]
       end
       

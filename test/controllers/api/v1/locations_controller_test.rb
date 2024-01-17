@@ -23,25 +23,6 @@ class Api::V1::LocationsControllerTest < ActionDispatch::IntegrationTest
         assert_response :not_found
     end
 
-    test 'should get items for unauthenticated user and public location' do
-        get items_api_v1_location_url(locations(:shed))
-        assert_response :success
-        
-        response_body = JSON.parse(response.body)
-        public_location_items = items.select { |item| item['location_id'] == locations(:shed).id }
-        
-        assert_equal public_location_items.length, response_body['data'].length
-    end
-
-    test 'should not get items for unauthenticated user and private location' do
-        get items_api_v1_location_url(locations(:hangar))
-        assert_response :not_found
-    end      
-
-    test 'should not get get items for unauthenticated user and private location' do
-        get items_api_v1_location_url(locations(:hangar))
-        assert_response :not_found
-    end   
 
     test 'should be able to create location when logged in and is geocoded' do
         assert_difference('Location.count') do
