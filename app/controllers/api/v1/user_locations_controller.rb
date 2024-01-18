@@ -23,7 +23,7 @@ class Api::V1::UserLocationsController < ApplicationController
   # PATCH/PUT /api/v1/locations/:location_id/users/:id
   def update
     authorize! :update, @user_location
-    if @user_location.update(parsed_json_request)
+    if @user_location.update(parsed_json_request[:attributes])
       render json: LocationUserSerializer.new(@user_location).serializable_hash
     else
       render json: @user_location.errors, status: :unprocessable_entity

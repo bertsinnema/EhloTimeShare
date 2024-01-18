@@ -4,14 +4,23 @@ class ApplicationController < ActionController::API
     protected
   
     def parsed_json_request
-    
         @parsed_json = JSON.parse(request.body.read)
-        # Assuming you use strong parameters
-        @parsed_json = @parsed_json.dig('data', 'attributes') || {}
+        
+        data = @parsed_json['data']
+        
+        attributes = data['attributes'] || {}
+        relationships = data['relationships'] || {}
+        
+        result = {
+          attributes: attributes,
+          relationships: relationships
+        }
       
-    rescue JSON::ParserError
+        result
+      rescue JSON::ParserError
         render json: { errors: ['Invalid JSON'] }, status: :unprocessable_entity
-    end
+      end
+      
 
     def configure_permitted_parameters
         devise_parameter_sanitizer.permit(:sign_up, keys: %i[name avatar])

@@ -16,7 +16,7 @@ class Api::V1::LocationsController < ApplicationController
   # POST /api/v1/locations
   def create
     authorize! :create, Location
-    @location = Location.new(parsed_json_request)
+    @location = Location.new(parsed_json_request[:attributes])
     
     if @location.save && @location.user_locations.create(user: current_user, role: "owner")
       render json: LocationSerializer.new(@location).serializable_hash, status: :created, location: api_v1_location_path(@location.id)
@@ -28,7 +28,7 @@ class Api::V1::LocationsController < ApplicationController
   # PATCH/PUT /api/v1/locations/1
   def update
     authorize! :update, @location
-    if @location.update(parsed_json_request)
+    if @location.update(parsed_json_request[:attributes])
       render json: LocationSerializer.new(@location).serializable_hash, location: api_v1_location_path(@location.id)
     else
       render json: @location.errors, status: :unprocessable_entity
