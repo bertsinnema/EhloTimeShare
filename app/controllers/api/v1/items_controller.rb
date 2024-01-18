@@ -1,11 +1,11 @@
 class Api::V1::ItemsController < ApplicationController
     before_action :set_item, only: %i[ show update destroy ]
-    before_action :set_location, only: %i[ index create ]
+    before_action :set_location, only: %i[ index update create ]
   
     # GET /api/v1/locations/:location_id/items
     def index
       authorize! :read, @location
-      items = @location.items
+      items = @location.items.accessible_by(current_ability, :read)
       render json: ItemSerializer.new(items).serializable_hash
     end
   
@@ -23,7 +23,7 @@ class Api::V1::ItemsController < ApplicationController
       @item.location_id = location_data['id'] if location_data
 
       if @item.save
-        render json: ItemSerializer.new(@item).serializable_hash, location: api_v1_location_item_path(@location, @item)
+        render json: ItemSerializer.new(@item).serializable_hash, location: api_v1_location_item_path(@location, @item), status: :created
       else
         render json: @item.errors, status: :unprocessable_entity
       end
@@ -31,7 +31,7 @@ class Api::V1::ItemsController < ApplicationController
 
     def update
       authorize! :update, @item
-      if @item.update(parsed_json_request)
+      if @item.update(parsed_json_request[:attributes])
         render json: ItemSerializer.new(@item).serializable_hash, location: api_v1_location_item_path(@location, @item)
       else
         render json: @item.errors, status: :unprocessable_entity
@@ -40,7 +40,7 @@ class Api::V1::ItemsController < ApplicationController
 
     def destroy
       authorize! :destroy, @item
-      render json: ItemSerializer.new(@item).serializable_hash
+      @item.destroy!
     end
 
     private

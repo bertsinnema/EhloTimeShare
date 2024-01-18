@@ -5,7 +5,7 @@ class Ability
 
     #Define public abillities
     can :read, Location, public: true
-    can :read, Item, location: { public: true }
+    can :read, Item, location: { public: true }, active: true
     return unless user.present?
     
     #allow anyone to create a new Location
@@ -41,7 +41,7 @@ class Ability
 
         when 'member'
           can :read, Location, id: user_location.location_id, public: false
-          can :read, Item, location_id: user_location.location_id
+          can :read, Item, location_id: user_location.location_id, active: true
           
           # Members can remove themselves from a location
           can :destroy, UserLocation, user_id: user.id, location_id: user_location.location_id

@@ -2,9 +2,41 @@
 cessna:
   id: 1
   name: Cessna 172
+  description: This is an old wheelbarrow with wings on it
+  active: true
   location_id: 1
 
-hammer:
+cirrus:
   id: 2
+  name: Cirrus SR22
+  description: This the ferarri of general aviation
+  active: true
+  location_id: 1
+
+piper:
+  id: 3
+  name: Piper Archer III
+  description: This is the low wing aircraft that is often in maintenance
+  active: false
+  location_id: 1  
+
+hammer:
+  id: 4
   name: Hammer
+  description: To hit things on the head with, preferably nails
+  active: true
   location_id: 2
+
+saw:
+  id: 5
+  name: Saw
+  description: The tool, not the movie
+  active: true
+  location_id: 2
+
+screwdriver:
+  id: 6
+  name: Screwdriver
+  description: Right tighty, lefty loosy
+  active: false
+  location_id: 2  

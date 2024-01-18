@@ -15,9 +15,10 @@ class AbilityTest < ActiveSupport::TestCase
     assert ability.cannot?(:read, locations(:hangar))
   end
 
-  test 'anonymous user can read items of public locations' do
+  test 'anonymous user can read active items of public locations' do
     ability = Ability.new(nil)
     assert ability.can?(:read, items(:hammer))
+    assert ability.cannot?(:read, items(:screwdriver))
   end
 
   test 'anonymous user cannot read items of private locations' do
@@ -57,6 +58,20 @@ class AbilityTest < ActiveSupport::TestCase
     assert ability.cannot?(:manage, items(:hammer))
   end  
 
+  test 'should not be able to read an item that is inactive as a member of a private location' do
+    ability = Ability.new(users(:sully))
+    assert ability.cannot?(:read, items(:piper))
+  end 
+  
+  test 'should be able to read an item that is inactive as a manager or owner of a private location' do
+    #owner
+    ability = Ability.new(users(:orville))
+    assert ability.can?(:read, items(:piper))
+    #manager
+    ability = Ability.new(users(:wilbur))
+    assert ability.can?(:read, items(:piper))
+  end 
+
   test 'you can read all users of a location where you are the owner' do
     ability = Ability.new(users(:orville))
     assert ability.can?(:read, user_locations(:orville_owner_hangar))
@@ -80,6 +95,8 @@ class AbilityTest < ActiveSupport::TestCase
     ability = Ability.new(users(:alice))
     assert ability.cannot?(:read, user_locations(:orville_owner_hangar))
   end 
+
+
 
   #todo: ownership transfer needs some thought, probably needs a custom ability
 

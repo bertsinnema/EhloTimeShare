@@ -9,16 +9,16 @@ class Api::V1::UserLocationsController < ApplicationController
   end
   
   # POST /api/v1/locations/:location_id/users
-  #TODO: create invite strategy
-  def create
-    authorize! :create, UserLocation.new({location_id: @location.id})
-    @user_location = UserLocation.new(parsed_json_request);
-    if @location.save
-      render json: LocationUserSerializer.new(@user_location).serializable_hash
-    else
-      render json: @user_location.errors, status: :unprocessable_entity
-    end    
-  end
+  #TODO: create invite strategy, probably in a seperate controller
+  # def create
+  #   authorize! :create, UserLocation.new({location_id: @location.id})
+  #   @user_location = UserLocation.new(parsed_json_request);
+  #   if @location.save
+  #     render json: LocationUserSerializer.new(@user_location).serializable_hash
+  #   else
+  #     render json: @user_location.errors, status: :unprocessable_entity
+  #   end    
+  # end
 
   # PATCH/PUT /api/v1/locations/:location_id/users/:id
   def update
